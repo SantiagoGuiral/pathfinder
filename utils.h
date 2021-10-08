@@ -10,5 +10,6 @@ void freeMemory(double **A, double **B);
 void freeData(double ****data, int matrixSize, int nmats);
 void freeCoarse(double ***coarse, int matrixSize, int threads);
 void storeData(FILE *fh, double ****data, int matrixSize, int nmats);
+void getMatrices(double ****data, double **a, double **b, int matrixSize, int index);
 
 #endif /* UTILS_H_ */

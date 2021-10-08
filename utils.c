@@ -133,3 +133,14 @@ void storeData(FILE *fh, double ****data, int matrixSize, int nmats){
 		}
 	}
 }
+
+void getMatrices(double ****data, double **a, double **b, int matrixSize, int index){
+	int i,j;
+	for (i=0;i<matrixSize;i++){
+		for (j=0;j<matrixSize;j++){
+			a[i][j]=data[index][0][i][j];
+			b[i][j]=data[index][1][i][j];
+		}
+	}
+}
+

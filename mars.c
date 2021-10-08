@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib-h>
+#include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
 
@@ -9,8 +9,8 @@
 #include <alchemy/mutex.h>
 
 #include "coarsemm.h"
-#include "encode.h"
 #include "utils.h"
+#include "producer_consumer.h"
 
 #define NTASKS 4
 
@@ -18,10 +18,11 @@ RT_TASK task[NTASKS];
 
 RT_MUTEX resource;
 
-void encoder(void *arg){
-
+void f1(void *arg){
+	
+	int num = * (int *)arg;
+	//encodeVideo();
 	rt_printf("%d Task encode running \n",num);
-	encodeVideo();
 
 }
 
@@ -35,30 +36,30 @@ void mm(void *arg){
 	double ****data;
 	int matrixSize;
 	int nmats;
-	int threads = 2;
+	int threads = 3;
 
 	fh = fopen(fname,"r");
 	fscanf(fh, "%d %d\n", &nmats, &matrixSize);
 	data=allocateData(matrixSize,nmats);
 	storeData(fh,data,matrixSize,nmats);
 	fclose(fh);
-
 	a = allocateMatrix(matrixSize);
 	b = allocateMatrix(matrixSize);
 	coarse = allocate3DMatrix(matrixSize,threads);
 
 	matmulcoarse(a,b,coarse,data,threads,matrixSize,nmats);
+	printCoarse(coarse,matrixSize,threads);
 
 	freeMemory(a,b);
-	freeCoarse(coarse,matrixSize,nmats);
+	freeCoarse(coarse,matrixSize,threads);
 	freeData(data,matrixSize,nmats);
-	
 	rt_printf("%d Task coarse mm running \n",num);
 }
 
-void f3(void *arg){
+void pc(void *arg){
 	int num = * (int *)arg;
 	rt_printf("%d Task f3 running \n",num);
+	prod_cons();
 }
 
 void f4(void *arg){
@@ -73,10 +74,10 @@ int main (int argc, char* argv[]){
 	
 	rt_mutex_create (&resource, "Semaphore");
 
-	char[10] task0 ="Data";	
-	char[10] task1 ="Video";	
-	char[10] task2 ="Radio";	
-	char[10] task3 ="Measure";	
+	char task0[] ="f1";	
+	char task1[] ="Data";	
+	char task2[] ="Radio";	
+	char task3[] ="f4";	
 
 	rt_task_create(&task[0], task0, 0,50,0);
 	rt_task_create(&task[1], task1, 0,50,0);
@@ -86,13 +87,13 @@ int main (int argc, char* argv[]){
 	for (i=0;i<NTASKS;i++){
 		switch(i){
 			case 0:
-				rt_task_start(&task[i], &encoder, &i);
+				rt_task_start(&task[i], &f1, &i);
 				break;
 			case 1:
 				rt_task_start(&task[i], &mm, &i);
 				break;
 			case 2:
-				rt_task_start(&task[i], &f3, &i);
+				rt_task_start(&task[i], &pc, &i);
 				break;
 			case 3:
 				rt_task_start(&task[i], &f4, &i);
