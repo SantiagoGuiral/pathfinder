@@ -26,7 +26,7 @@ void radio(void *arg){
 	float period;
 	
 	RTIME now;
-    period=2e9;
+    period=10e9;
     rt_task_set_periodic(NULL,TM_INFINITE,period);
     now=rt_timer_read();
 
@@ -34,7 +34,7 @@ void radio(void *arg){
 
 		r=pc();
 		if (r<0){
-			printf("Error producer-consumer");
+			rt_printf("Error producer-consumer");
 			exit(-1);
 		}
 
@@ -51,7 +51,7 @@ void mm(void *arg){
 	//int num = * (int *)arg;
 	float period;
 	RTIME now;
-	period=2e9;
+	period=6e9;
 	rt_task_set_periodic(NULL,TM_INFINITE,period);
 	now=rt_timer_read();
 
@@ -99,7 +99,7 @@ void image_gen(void *arg){
 
 	float period;
 	RTIME now;
-	period=3e9;
+	period=6e9;
 	rt_task_set_periodic(NULL,TM_INFINITE,period);
 	now=rt_timer_read();
 

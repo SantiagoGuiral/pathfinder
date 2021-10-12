@@ -13,7 +13,7 @@
 /*************************************************/
 
 /*************************************************/
-//  - Code modified by Prof. Gustavo Patino  -
+//  - Code modified by Santiago Guiral  -
 //    - Real-Time Systems (IEO 2547027) -
 //     - University of Antioquia (UdeA) -
 //      - Medellin, Colombia 2021 -
@@ -31,7 +31,7 @@
 #include "periodic_settings.h"
 #include "task_definition.h"
 
-#define SECONDS_TO_RUN 1
+#define SECONDS_TO_RUN 4
 
 
 pthread_mutex_t lock;
@@ -44,7 +44,7 @@ void *prod(void* p_d)
 	struct periodic_thread* temp = (struct periodic_thread*) p_d;
 
 	temp->offset = 20000; // En unidades de us.
-	temp->period = 200000; // En unidades de us.
+	temp->period = 1000000; // En unidades de us.
 	temp->count = 0;
 
 	printf("\nThread 1 with period : %d ms. \n", temp->period/1000);
@@ -65,7 +65,7 @@ void *cons(void* p_d)
 	struct periodic_thread* temp = (struct periodic_thread*) p_d;
 
 	temp->offset = 40000;
-	temp->period = 200000;
+	temp->period = 1000000;
 	temp->count = 0;
 
 	printf("\nThread 2 with period : %d ms. \n", temp->period/1000);
