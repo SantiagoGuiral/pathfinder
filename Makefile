@@ -18,13 +18,14 @@ COARSE = coarsemm
 UTILS = utils
 QUEUE =pt_queue
 MARS = mars
-PC= producer_consumer
-PCT = threads_definition
+PC= procons
+PCTASK = task_definition
+PCTIMES = periodic_settings
 
-$(MARS): $(MARS).o $(UTILS).o $(QUEUE).o $(COARSE).o $(PC).o $(PCT).o
+$(MARS): $(MARS).o $(UTILS).o $(QUEUE).o $(COARSE).o $(PC).o $(PCTASK).o $(PCTIMES).o
 	$(CC) -o $@ $+ $(CFLAGS) $(LDFLAGS)
 
-$(MARS).o: $(MARS).c $(UTILS).h $(QUEUE).h $(COARSE).h $(PC).h $(PCT).h
+$(MARS).o: $(MARS).c $(UTILS).h $(QUEUE).h $(COARSE).h $(PC).h $(PCTASK).h $(PCTIMES).h
 	$(CC) $(CCFLAGS) -c $(MARS).c $(CFLAGS) $(LDFLAGS)
 
 $(UTILS).o: $(UTILS).c $(UTILS).h
@@ -36,14 +37,14 @@ $(QUEUE).o: $(QUEUE).c $(QUEUE).h
 $(COARSE).o: $(COARSE).c $(COARSE).h
 	$(CC) $(CCFLAGS) -c $(COARSE).c $(THREADS)
 
-$(PCT).o: $(PCT).c $(PCT).h
-	$(CC) $(CCFLAGS) -c $(PCT).c $(RTLIBS) $(THREADS)
+$(PCTASK).o: $(PCTASK).c $(PCTASK).h
+	$(CC) $(CCFLAGS) -c $(PCTASK).c $(RTLIBS) $(THREADS)
+
+$(PCTIMES).o: $(PCTIMES).c $(PCTIMES).h
+	$(CC) $(CCFLAGS) -c $(PCTIMES).c $(RTLIBS) $(THREADS)
 
 $(PC).o: $(PC).c $(PC).h
 	$(CC) $(CCFLAGS) -c $(PC).c $(RTLIBS) $(THREADS)
-
-
-
 
 clean:
 	$(RM) *.o

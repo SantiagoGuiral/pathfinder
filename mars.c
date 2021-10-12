@@ -10,7 +10,7 @@
 
 #include "coarsemm.h"
 #include "utils.h"
-#include "producer_consumer.h"
+#include "procons.h"
 
 #define NTASKS 4
 
@@ -18,48 +18,82 @@ RT_TASK task[NTASKS];
 
 RT_MUTEX resource;
 
-void f1(void *arg){
+void radio(void *arg){
+	//int num = * (int *)arg;
+	int r;
+	float period;
 	
-	int num = * (int *)arg;
-	//encodeVideo();
-	rt_printf("%d Task encode running \n",num);
+	RTIME now;
+    period=2e9;
+    rt_task_set_periodic(NULL,TM_INFINITE,period);
+    now=rt_timer_read();
 
+    while(1){
+
+		r=pc();
+		if (r<0){
+			printf("Error producer-consumer");
+			exit(-1);
+		}
+
+		//rt_printf("%d Task Radio running \n",num);
+		RT_TASK_INFO curtaskinfo;
+        rt_task_inquire(NULL,&curtaskinfo);
+        rt_printf("%s task - cycle time: %.5f s\n",curtaskinfo.name,(rt_timer_read()-now)/1000000000.0);
+
+        rt_task_wait_period(NULL);
+	}
 }
 
 void mm(void *arg){
-	int num = * (int *)arg;
+	//int num = * (int *)arg;
+	float period;
+	RTIME now;
+	period=2e9;
+	rt_task_set_periodic(NULL,TM_INFINITE,period);
+	now=rt_timer_read();
 
-	char *fname = "matrices_test.dat";
-	FILE *fh;
+	while(1){
+		char *fname = "matrices_test.dat";
+		FILE *fh;
 
-	double **a, **b, ***coarse;
-	double ****data;
-	int matrixSize;
-	int nmats;
-	int threads = 3;
+		double **a, **b, ***coarse;
+		double ****data;
+		int matrixSize;
+		int nmats;
+		int threads = 1;
 
-	fh = fopen(fname,"r");
-	fscanf(fh, "%d %d\n", &nmats, &matrixSize);
-	data=allocateData(matrixSize,nmats);
-	storeData(fh,data,matrixSize,nmats);
-	fclose(fh);
-	a = allocateMatrix(matrixSize);
-	b = allocateMatrix(matrixSize);
-	coarse = allocate3DMatrix(matrixSize,threads);
+		fh = fopen(fname,"r");
+		fscanf(fh, "%d %d\n", &nmats, &matrixSize);
+		data=allocateData(matrixSize,nmats);
+		storeData(fh,data,matrixSize,nmats);
+		fclose(fh);
+		a = allocateMatrix(matrixSize);
+		b = allocateMatrix(matrixSize);
+		coarse = allocate3DMatrix(matrixSize,threads);
 
-	matmulcoarse(a,b,coarse,data,threads,matrixSize,nmats);
-	printCoarse(coarse,matrixSize,threads);
+		matmulcoarse(a,b,coarse,data,threads,matrixSize,nmats);
+		printCoarse(coarse,matrixSize,threads);
 
-	freeMemory(a,b);
-	freeCoarse(coarse,matrixSize,threads);
-	freeData(data,matrixSize,nmats);
-	rt_printf("%d Task coarse mm running \n",num);
+		freeMemory(a,b);
+		freeCoarse(coarse,matrixSize,threads);
+		freeData(data,matrixSize,nmats);
+		
+		//rt_printf("%d Task coarse mm running \n",num);
+		RT_TASK_INFO curtaskinfo;
+	    rt_task_inquire(NULL,&curtaskinfo);
+		rt_printf("%s task - cycle time: %.5f s\n",curtaskinfo.name,(rt_timer_read()-now)/1000000000.0);
+
+		rt_task_wait_period(NULL);
+	}
+
 }
 
-void pc(void *arg){
+void pcc(void *arg){
+	int result;
 	int num = * (int *)arg;
-	rt_printf("%d Task f3 running \n",num);
-	prod_cons();
+	//result=	prod_cons();
+	rt_printf("%d Task Data running \n",num);
 }
 
 void f4(void *arg){
@@ -68,11 +102,10 @@ void f4(void *arg){
 }
 
 
-
 int main (int argc, char* argv[]){
 	int i;
 	
-	rt_mutex_create (&resource, "Semaphore");
+	rt_mutex_create(&resource, "Semaphore");
 
 	char task0[] ="f1";	
 	char task1[] ="Data";	
@@ -87,13 +120,13 @@ int main (int argc, char* argv[]){
 	for (i=0;i<NTASKS;i++){
 		switch(i){
 			case 0:
-				rt_task_start(&task[i], &f1, &i);
+				rt_task_start(&task[i], &radio, &i);
 				break;
 			case 1:
 				rt_task_start(&task[i], &mm, &i);
 				break;
 			case 2:
-				rt_task_start(&task[i], &pc, &i);
+				rt_task_start(&task[i], &pcc, &i);
 				break;
 			case 3:
 				rt_task_start(&task[i], &f4, &i);
