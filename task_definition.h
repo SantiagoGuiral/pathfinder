@@ -1,15 +1,19 @@
-/*************************************************/
-//  - Code by Prof. Gustavo Patino  -
-//    - Real-Time Systems (IEO 2547027) -
-//     - University of Antioquia (UdeA) -
-//      - Medellin, Colombia 2021 -
-/*************************************************/
+#ifndef TASK_DEFINITION_H_
+#define TASK_DEFINITION_H_
 
 #include <stdio.h>
 #include <pthread.h>
 
 pthread_mutex_t lock;
 
+
+int peek();
+int isEmpty();
+int isFull();
+int size();
 void producer(int* c);
 void consumer(int* c);
+
+
+#endif /* TASK_DEFINITION_H_ */
 

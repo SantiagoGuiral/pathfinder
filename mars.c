@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <time.h>
 
 #include <alchemy/task.h>
 #include <alchemy/timer.h>
@@ -103,6 +104,8 @@ void f4(void *arg){
 
 
 int main (int argc, char* argv[]){
+
+	//rand(time(NULL));
 	int i;
 	
 	rt_mutex_create(&resource, "Semaphore");
