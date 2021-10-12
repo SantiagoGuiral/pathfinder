@@ -67,8 +67,8 @@ void start_periodic_timer(struct periodic_thread* perthread)
 	current_time();
 	#endif
 
-	printf("Este hilo tiene un periodo esperado de : %d us. \n", perthread->period);
-	printf("El offset de este hilo es de %d us.\n", perthread->offset);
+	//printf("The period of the thread is: %d us. \n", perthread->period);
+	//printf("The offset of the thread is: %d us.\n", perthread->offset);
 
 	clock_gettime(CLOCK_REALTIME, &perthread->r);
 	timespec_add_us(&perthread->r, perthread->offset);

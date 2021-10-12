@@ -21,11 +21,12 @@ MARS = mars
 PC= procons
 PCTASK = task_definition
 PCTIMES = periodic_settings
+IMAGEN = image
 
-$(MARS): $(MARS).o $(UTILS).o $(QUEUE).o $(COARSE).o $(PC).o $(PCTASK).o $(PCTIMES).o
+$(MARS): $(MARS).o $(UTILS).o $(QUEUE).o $(COARSE).o $(PC).o $(PCTASK).o $(PCTIMES).o $(IMAGEN).o
 	$(CC) -o $@ $+ $(CFLAGS) $(LDFLAGS)
 
-$(MARS).o: $(MARS).c $(UTILS).h $(QUEUE).h $(COARSE).h $(PC).h $(PCTASK).h $(PCTIMES).h
+$(MARS).o: $(MARS).c $(UTILS).h $(QUEUE).h $(COARSE).h $(PC).h $(PCTASK).h $(PCTIMES).h $(IMAGEN).h
 	$(CC) $(CCFLAGS) -c $(MARS).c $(CFLAGS) $(LDFLAGS)
 
 $(UTILS).o: $(UTILS).c $(UTILS).h
@@ -45,6 +46,9 @@ $(PCTIMES).o: $(PCTIMES).c $(PCTIMES).h
 
 $(PC).o: $(PC).c $(PC).h
 	$(CC) $(CCFLAGS) -c $(PC).c $(RTLIBS) $(THREADS)
+
+$(IMAGEN).o: $(IMAGEN).c $(IMAGEN).h
+	$(CC) $(CCFLAGS) -c $(IMAGEN).c
 
 clean:
 	$(RM) *.o

@@ -10,8 +10,6 @@ int front = 0;
 int rear = -1;
 int itemCount = 0;
 
-pthread_mutex_t lock;
-
 int peek() {
    return queue[front];
 }

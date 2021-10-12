@@ -105,7 +105,7 @@ int pc(){
 	sleep(SECONDS_TO_RUN);
 
 	pthread_mutex_lock(&lock);
-	printf("\nThis code just ran for %d seconds. This is #define paramater.\n\n", SECONDS_TO_RUN);
+	printf("\nThis code just ran for %d seconds.\n", SECONDS_TO_RUN);
 	printf("Considering the offset of %d us, and the period of %d us, there were %d iterations of Thread 1.\n", pt1->offset, pt1->period, pt1->count);
 	printf("Considering the offset of %d us, and the period of %d us, there were %d iterations of Thread 2.\n", pt2->offset, pt2->period, pt2->count);
 	pthread_mutex_unlock(&lock);
