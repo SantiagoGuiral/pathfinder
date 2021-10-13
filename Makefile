@@ -23,11 +23,12 @@ PCTASK = task_definition
 PCTIMES = periodic_settings
 IMAGEN = image
 RS = resource
+PING = ping
 
-$(MARS): $(MARS).o $(UTILS).o $(QUEUE).o $(COARSE).o $(PC).o $(PCTASK).o $(PCTIMES).o $(IMAGEN).o $(RS).o
+$(MARS): $(MARS).o $(UTILS).o $(QUEUE).o $(COARSE).o $(PC).o $(PCTASK).o $(PCTIMES).o $(IMAGEN).o $(RS).o $(PING).o
 	$(CC) -o $@ $+ $(CFLAGS) $(LDFLAGS)
 
-$(MARS).o: $(MARS).c $(UTILS).h $(QUEUE).h $(COARSE).h $(PC).h $(PCTASK).h $(PCTIMES).h $(IMAGEN).h $(RS).h
+$(MARS).o: $(MARS).c $(UTILS).h $(QUEUE).h $(COARSE).h $(PC).h $(PCTASK).h $(PCTIMES).h $(IMAGEN).h $(RS).h $(PING).h
 	$(CC) $(CCFLAGS) -c $(MARS).c $(CFLAGS) $(LDFLAGS)
 
 $(UTILS).o: $(UTILS).c $(UTILS).h
@@ -53,6 +54,11 @@ $(IMAGEN).o: $(IMAGEN).c $(IMAGEN).h
 
 $(RS).o: $(RS).c $(RS).h
 	$(CC) $(CCFLAGS) -c $(RS).c
+
+$(PING).o: $(PING).c $(PING).h
+	$(CC) $(CCFLAGS) -c $(PING).c
+
+
 
 clean:
 	$(RM) *.o

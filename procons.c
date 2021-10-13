@@ -31,7 +31,7 @@
 #include "periodic_settings.h"
 #include "task_definition.h"
 
-#define SECONDS_TO_RUN 4
+#define SECONDS_TO_RUN 3
 
 
 pthread_mutex_t lock;
@@ -44,7 +44,7 @@ void *prod(void* p_d)
 	struct periodic_thread* temp = (struct periodic_thread*) p_d;
 
 	temp->offset = 20000; // En unidades de us.
-	temp->period = 1000000; // En unidades de us.
+	temp->period = 1500000; // En unidades de us.
 	temp->count = 0;
 
 	printf("\nThread 1 with period : %d ms. \n", temp->period/1000);
@@ -65,7 +65,7 @@ void *cons(void* p_d)
 	struct periodic_thread* temp = (struct periodic_thread*) p_d;
 
 	temp->offset = 40000;
-	temp->period = 1000000;
+	temp->period = 1500000;
 	temp->count = 0;
 
 	printf("\nThread 2 with period : %d ms. \n", temp->period/1000);
