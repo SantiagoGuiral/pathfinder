@@ -54,7 +54,6 @@ $(IMAGEN).o: $(IMAGEN).c $(IMAGEN).h
 $(RS).o: $(RS).c $(RS).h
 	$(CC) $(CCFLAGS) -c $(RS).c
 
-c
 clean:
 	$(RM) *.o
 	$(RM) $(MARS)

@@ -13,6 +13,7 @@
 #include "utils.h"
 #include "procons.h"
 #include "image.h"
+#include "resource.h"
 
 #define NTASKS 4
 
@@ -21,14 +22,14 @@ RT_TASK task[NTASKS];
 RT_MUTEX resource;
 
 void radio(void *arg){
+	RTIME now;
+    now=rt_timer_read();
 	//int num = * (int *)arg;
 	int r;
 	float period;
 	
-	RTIME now;
     period=10e9;
     rt_task_set_periodic(NULL,TM_INFINITE,period);
-    now=rt_timer_read();
 
     while(1){
 
@@ -48,12 +49,12 @@ void radio(void *arg){
 }
 
 void mm(void *arg){
+	RTIME now;
+	now=rt_timer_read();
 	//int num = * (int *)arg;
 	float period;
-	RTIME now;
 	period=6e9;
 	rt_task_set_periodic(NULL,TM_INFINITE,period);
-	now=rt_timer_read();
 
 	while(1){
 		char *fname = "matrices_test.dat";
@@ -92,20 +93,27 @@ void mm(void *arg){
 }
 
 void image_gen(void *arg){
-	//int num = * (int *)arg;
+	RTIME now;
+	now=rt_timer_read();
+	int num = * (int *)arg;
 	int width,height;
 	width=1920;
 	height=1080;
 
 	float period;
-	RTIME now;
 	period=6e9;
 	rt_task_set_periodic(NULL,TM_INFINITE,period);
-	now=rt_timer_read();
 
 	while(1){
 		createImage("colorscale.bmp", width, height);
 		//rt_printf("%d Task Data running \n",num);
+
+		rt_printf("Task Image Encoding locks resource");
+		rt_mutex_acquire(&resource,TM_INFINITE);
+		sharedresource(num);
+		rt_mutex_release(&resource);
+		rt_printf("Task Image Encoding unlocks resource");
+
 		RT_TASK_INFO curtaskinfo;
 	    rt_task_inquire(NULL,&curtaskinfo);
 		rt_printf("%s task - cycle time: %.5f s\n",curtaskinfo.name,(rt_timer_read()-now)/1000000000.0);
@@ -122,7 +130,6 @@ void f4(void *arg){
 
 int main (int argc, char* argv[]){
 
-	//rand(time(NULL));
 	int i;
 	
 	rt_mutex_create(&resource, "Semaphore");

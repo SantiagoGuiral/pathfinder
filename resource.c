@@ -1,12 +1,11 @@
 #include <unistd.h>
+#include <stdio.h>
 
 #include "resource.h"
 
-void sharedresource(){
+void sharedresource(int n){
 
-	int sl;
-	sl=1;
-	rt_printf("Init of the shared resource\n")
-	sleep(sl);
-	rt_printf("End of the shared resource\n")
+	printf("Init of the shared resource\n");
+	sleep(n);
+	printf("End of the shared resource\n");
 }

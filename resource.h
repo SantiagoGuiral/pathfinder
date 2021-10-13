@@ -1,8 +1,7 @@
-#ifndef IMAGE_H_
-#define IMAGE_H_
+#ifndef RESOURCE_H_
+#define RESOURCE_H_
 
-void sharedresource();
+void sharedresource(int n);
 
-
-#endif /* IMAGE_H_ */
+#endif /* RESOURCE_H_ */
 
