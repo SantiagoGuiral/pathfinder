@@ -6,7 +6,7 @@ The project was developed for the course of real-time systems at the University 
 Authors:
 
 
-<a href="https://github.com/SantiagoGuiral/ress/graphs/contributors">
+<a href="https://github.com/SantiagoGuiral/pathfinder/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=SantiagoGuiral/ress" />
 </a>
 
