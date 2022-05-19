@@ -12,8 +12,11 @@ Authors:
 
 
 Santiago Ríos Guiral(@SantiagoGuiral)
+
 Emmanuel Gomez Ospina(@Ego2509)
-Made with [contrib.rocks](https://contrib.rocks).
+
+
+[contrib.rocks](https://contrib.rocks).
 
 University of Antioquia.
 Electronic and Telecommunications department.
